@@ -1,24 +1,27 @@
 name: BuildAndTest
 
 on: 
-    push:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        
-        steps: 
-            - uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+    
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-            - name: Set up CMake
-              uses: jwlowson/actions-setup-cmake@v1
+      - name: Install CMake
+        run: sudo apt-get install -y cmake
 
-            - name: Configure CMake
-              run: cmake -S . -B build
+      - name: Configure CMake
+        run: cmake -S . -B build
 
-            - name: Build
-              run: cmake --build build
+      - name: Build
+        run: cmake --build build
 
-            - name: Run tests
-              run: ctest --test-dir build
+      - name: Run tests
+        run: ctest --test-dir build
